@@ -15,7 +15,7 @@ public class TestingRandomNumbers {
 
     public static int getRN(int min, int max) {
         Random rng = new Random();
-        int answer = rng.nextInt((max - min + 1) + min);
+        int answer = rng.nextInt((max - min) + 1) + min;
         return answer;
     } //end getRN
     
