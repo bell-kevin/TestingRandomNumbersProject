@@ -82,7 +82,30 @@ rng.nextInt (someNumber)
 
 There is no term for the starting number to be added to this random number -- it was used inside of the parentheses for the parameter for rng.nextInt().   
 
-In the formula above, the number of numbers, inside the parentheses that follow rng.nextInt, does more than provide the number of numbers, it also adds the min or starting point to that number of numbers. If the random number generator is supposed to use 10 numbers that start with 20, that would be the numbers 20, 21, 22, 23, ... 29. The formula above says that the number of numbers is that 10 plus the min value of 20, so the number of numbers is now 30. And there is no starting value, so the random number generator will create a number from 0 to 30. Thus it is possible to get numbers that are less than the intended starting point of 20, and one higher than the intended max value of 29.  How do you fix that pattern so the parameter for rng.nextInt() has only the number of numbers in it, and the starting value is separate, added to that random number?  In C#: The pattern for random numbers in C# is a little different from the pattern for Java. They are so similar in so much code, but there is a difference for creating random numbers. There are several patterns, but the one intended here is:  (int) rng.Next(starting value, ending value + 1)  The rng.Next() method always returns a double, so it must have the cast to an integer at the beginning. There are 2 parameters, the shift (starting or min value) and the scope. That scope or max value will never be included in the possible random numbers, hence the "+1" in the pattern. If the code was:  (int) rng.Next(20, 30)  it would create a random number with the smallest possible number of 20 (the starting point) and the highest number will be 29, because it cannot go to 30. That value of 30 is the next integer after the highest one allowed. So this pattern also uses min and max values, but the shift and scope are represented differently. If min is 20 and max is 30, look at how the code provided works out:  (int) rng.Next(max - min + 1, min)  becomes   (int) rng.Next( 30 - 20 + 1, 20)  which becomes  (int) rng.Next(11, 20)  That means that the smallest number can be 11, and the largest number is one less than 20, or 19. The range of 11 to 19 is nothing at all like the intended range of 10 numbers starting at 20, or 20 to 29. None of the values generated with that pattern in the code provided would be valid.  How do you fix the pattern in the code provided above?
+In the formula above, the number of numbers, inside the parentheses that follow rng.nextInt, does more than provide the number of numbers, it also adds the min or starting point to that number of numbers. If the random number generator is supposed to use 10 numbers that start with 20, that would be the numbers 20, 21, 22, 23, ... 29. The formula above says that the number of numbers is that 10 plus the min value of 20, so the number of numbers is now 30. And there is no starting value, so the random number generator will create a number from 0 to 30. Thus it is possible to get numbers that are less than the intended starting point of 20, and one higher than the intended max value of 29.  
+
+
+How do you fix that pattern so the parameter for rng.nextInt() has only the number of numbers in it, and the starting value is separate, added to that random number?  
+
+In C#: The pattern for random numbers in C# is a little different from the pattern for Java. They are so similar in so much code, but there is a difference for creating random numbers. There are several patterns, but the one intended here is:  
+
+(int) rng.Next(starting value, ending value + 1)  
+
+The rng.Next() method always returns a double, so it must have the cast to an integer at the beginning. There are 2 parameters, the shift (starting or min value) and the scope. That scope or max value will never be included in the possible random numbers, hence the "+1" in the pattern. If the code was:  
+
+(int) rng.Next(20, 30)  
+
+it would create a random number with the smallest possible number of 20 (the starting point) and the highest number will be 29, because it cannot go to 30. That value of 30 is the next integer after the highest one allowed. So this pattern also uses min and max values, but the shift and scope are represented differently. If min is 20 and max is 30, look at how the code provided works out:  (int) rng.Next(max - min + 1, min)  becomes   
+
+(int) rng.Next( 30 - 20 + 1, 20)  
+
+which becomes  
+
+(int) rng.Next(11, 20)  
+
+That means that the smallest number can be 11, and the largest number is one less than 20, or 19. The range of 11 to 19 is nothing at all like the intended range of 10 numbers starting at 20, or 20 to 29. None of the values generated with that pattern in the code provided would be valid.  
+
+How do you fix the pattern in the code provided above?
 
 == We're Using GitHub Under Protest ==
 
